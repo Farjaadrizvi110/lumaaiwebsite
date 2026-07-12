@@ -123,7 +123,9 @@ export function Navbar() {
             variant="ghost"
             size="icon"
             className="md:hidden rounded-full h-9 w-9"
-            aria-label="Open menu"
+            aria-controls="mobile-nav"
+            aria-expanded={open}
+            aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((o) => !o)}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -134,6 +136,7 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-nav"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}

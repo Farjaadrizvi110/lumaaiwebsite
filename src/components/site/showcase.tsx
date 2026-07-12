@@ -88,9 +88,11 @@ export function Showcase() {
           if (isDesktop) {
             // Horizontal scroll pin
             const panels = gsap.utils.toArray<HTMLElement>('.showcase-panel')
-            const totalScroll = track.scrollWidth - window.innerWidth
+            const totalScroll = Math.max(track.scrollWidth - window.innerWidth, 0)
 
-            gsap.to(track, {
+            if (totalScroll === 0) return
+
+            const horizontalTween = gsap.to(track, {
               x: -totalScroll,
               ease: 'none',
               scrollTrigger: {
@@ -115,9 +117,7 @@ export function Showcase() {
                   ease: 'none',
                   scrollTrigger: {
                     trigger: panel,
-                    containerAnimation: ScrollTrigger.getById('showcase-h')
-                      ? undefined
-                      : undefined,
+                    containerAnimation: horizontalTween,
                     start: 'left right',
                     end: 'right left',
                     scrub: true,
@@ -241,14 +241,23 @@ function ProjectPanel({ project, index }: { project: Project; index: number }) {
                 </linearGradient>
               </defs>
               {Array.from({ length: 18 }).map((_, k) => (
-                <circle
-                  key={k}
-                  cx={200 + Math.cos(k * 0.45) * (60 + k * 8)}
-                  cy={250 + Math.sin(k * 0.45) * (50 + k * 6)}
-                  r={2 + k * 1.4}
-                  fill={`url(#g-${project.id})`}
-                  opacity={0.6 - k * 0.025}
-                />
+                (() => {
+                  const cx = (200 + Math.cos(k * 0.45) * (60 + k * 8)).toFixed(3)
+                  const cy = (250 + Math.sin(k * 0.45) * (50 + k * 6)).toFixed(3)
+                  const radius = (2 + k * 1.4).toFixed(1)
+                  const opacity = (0.6 - k * 0.025).toFixed(3)
+
+                  return (
+                    <circle
+                      key={k}
+                      cx={cx}
+                      cy={cy}
+                      r={radius}
+                      fill={`url(#g-${project.id})`}
+                      opacity={opacity}
+                    />
+                  )
+                })()
               ))}
               <path
                 d={`M 60 380 Q 200 ${100 + index * 30} 340 380`}

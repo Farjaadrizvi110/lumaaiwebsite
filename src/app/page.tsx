@@ -1,5 +1,3 @@
-'use client'
-
 import { Navbar } from '@/components/site/navbar'
 import { Hero } from '@/components/site/hero'
 import { Marquee } from '@/components/site/marquee'
